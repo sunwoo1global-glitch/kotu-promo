@@ -1,0 +1,64 @@
+# KOTU 자동 배포 워크플로우 — 4시간 주기
+# 목적: 매 4시간마다 (1) 다른 문구의 홍보 콘텐츠 생성 (2) 통계 리포트 갱신
+#       (3) Slack/디스코드 자동 공지 (4) 생성물 커밋·푸시
+#
+# 설치: 이 파일을 저장소 .github/workflows/auto_promo.yml 에 저장하면 자동 동작.
+# 주의: GitHub Actions 스케줄은 UTC 기준이며, 저장소가 60일간 활동 없으면
+#       스케줄이 자동 비활성화될 수 있습니다 (활동이 있으면 계속 유지).
+name: KOTU Auto Promo (every 4h)
+
+on:
+  schedule:
+    - cron: "0 */4 * * *"      # 매 4시간마다 (0시, 4시, 8시, 12시, 16시, 20시 UTC)
+  workflow_dispatch:           # 수동 실행도 가능
+
+permissions:
+  contents: write
+
+jobs:
+  auto_promo:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Generate varied content (매번 다른 문구)
+        run: |
+          python3 content_variation.py --out ./promo_out
+          echo "생성된 파일:"
+          ls -la promo_out/
+
+      - name: Regenerate stats report (성과 데이터 갱신)
+        run: |
+          python3 collect_stats.py --repo zpstudios/kotu --out ./report --promo promo_stats.csv
+
+      - name: Post to Slack (홍보 공지)
+        if: env.SLACK_WEBHOOK_URL != ''
+        continue-on-error: true
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+        run: |
+          POST=$(ls promo_out/post_slot_*.md | sort | tail -1)
+          TEXT=$(head -1 "$POST")
+          curl -s -X POST -H 'Content-type: application/json' \
+            --data "{\"text\":\"🔄 ${TEXT} — https://github.com/zpstudios/kotu/releases/latest\"}" \
+            "$SLACK_WEBHOOK_URL"
+
+      - name: Post to Discord (커뮤니티 공지)
+        if: env.DISCORD_WEBHOOK_URL != ''
+        continue-on-error: true
+        env:
+          DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
+        run: |
+          POST=$(ls promo_out/post_slot_*.md | sort | tail -1)
+          TEXT=$(head -1 "$POST")
+          curl -s -X POST -H 'Content-type: application/json' \
+            --data "{\"content\":\"${TEXT} — https://github.com/zpstudios/kotu/releases/latest\"}" \
+            "$DISCORD_WEBHOOK_URL"
+
+      - name: Commit & push (생성물 저장)
+        run: |
+          git config user.name "kotu-auto-bot"
+          git config user.email "bot@kotu.local"
+          git add promo_out/ report/
+          git commit -m "auto: 4h promo slot $(date -u +%Y%m%d-%H)" || echo "no changes"
+          git push
