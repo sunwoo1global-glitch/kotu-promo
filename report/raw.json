@@ -1,8 +1,8 @@
 {
   "total": {
     "setup": 102,
-    "portable": 33,
-    "all_assets": 12882
+    "portable": 34,
+    "all_assets": 12884
   },
   "per_release": [
     {
@@ -165,7 +165,7 @@
       "tag": "v0.368.1",
       "published": "2026-10-01T03:59:47Z",
       "setup": 2,
-      "portable": 2
+      "portable": 3
     },
     {
       "tag": "v0.368.0",
