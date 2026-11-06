@@ -1,14 +1,14 @@
 # KOTU 홍보 성과 리포트 (자동 생성)
 
-> 생성 시각: 2026-11-05 19:38 UTC  ·  대상 저장소: `zpstudios/kotu`
+> 생성 시각: 2026-11-06 00:49 UTC  ·  대상 저장소: `zpstudios/kotu`
 
 ## 1. 다운로드 현황
 
 | 구분 | 다운로드 수 |
 |---|---:|
-| 설치판 (KOTU-win-Setup.exe) | 214 |
-| 무설치판 (KOTU-win-Portable.zip) | 143 |
-| 릴리스 전체 자산 합계 | 13889 |
+| 설치판 (KOTU-win-Setup.exe) | 216 |
+| 무설치판 (KOTU-win-Portable.zip) | 144 |
+| 릴리스 전체 자산 합계 | 13893 |
 
 총 릴리스 수: 100개
 
