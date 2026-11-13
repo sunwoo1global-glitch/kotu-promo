@@ -1,15 +1,21 @@
 {
   "total": {
     "setup": 218,
-    "portable": 147,
-    "all_assets": 13935
+    "portable": 148,
+    "all_assets": 13918
   },
   "per_release": [
+    {
+      "tag": "v0.426.0",
+      "published": "2026-11-13T16:32:20Z",
+      "setup": 1,
+      "portable": 1
+    },
     {
       "tag": "v0.425.0",
       "published": "2026-11-09T17:12:53Z",
       "setup": 1,
-      "portable": 1
+      "portable": 2
     },
     {
       "tag": "v0.424.0",
@@ -598,12 +604,6 @@
       "published": "2026-09-03T23:55:45Z",
       "setup": 2,
       "portable": 2
-    },
-    {
-      "tag": "v0.328.0",
-      "published": "2026-09-03T23:28:59Z",
-      "setup": 1,
-      "portable": 1
     }
   ],
   "release_count": 100
